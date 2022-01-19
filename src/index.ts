@@ -1,5 +1,5 @@
 import { NodeType, NodeProp } from "@lezer/common";
-import { parser } from "lezer-julia";
+import { parser } from "@plutojl/lezer-julia";
 import {
   LRLanguage,
   LanguageSupport,
