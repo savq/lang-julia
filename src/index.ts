@@ -76,8 +76,6 @@ let juliaStyleTags = styleTags({
   "TryStatement/try CatchClause/catch FinallyClause/finally TryStatement/end":
     t.controlKeyword,
 
-  AssignmentExpression: t.propertyName,
-
   ":: <:": t.typeOperator,
 
   "( )": t.paren,
