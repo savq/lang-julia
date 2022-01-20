@@ -88,6 +88,9 @@ let juliaStyleTags = styleTags({
   // "CoefficientExpression!": t.special(t.number),
   "Coefficient!": t.unit,
 
+  // Look at us being rascals
+  "Type!": t.typeName,
+
   Identifier: t.variableName,
   "MacroIdentifier! MacroFieldExpression!": t.macroName,
   "FieldName!": t.propertyName,
