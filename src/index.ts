@@ -66,7 +66,7 @@ let juliaStyleTags = styleTags({
   "mutable struct StructDefinition/end": t.definitionKeyword,
   "primitive type PrimitiveDefinition/end": t.definitionKeyword,
   "const local global": t.definitionKeyword,
-  // "module ModuleDefinition/end import using export": t.moduleKeyword,
+  "module ModuleDefinition/end import using export": t.moduleKeyword,
 
   "ForStatement/for ForBinding/in ForStatement/end": t.controlKeyword,
   "WhileStatement/while WhileStatement/end": t.controlKeyword,
@@ -76,8 +76,6 @@ let juliaStyleTags = styleTags({
   "TryStatement/try CatchClause/catch FinallyClause/finally TryStatement/end":
     t.controlKeyword,
 
-  ":: <:": t.typeOperator,
-
   "( )": t.paren,
   "[ ]": t.paren,
   "{ }": t.paren,
@@ -85,14 +83,22 @@ let juliaStyleTags = styleTags({
 
   BooleanLiteral: t.bool,
   Number: t.number,
-  // "CoefficientExpression!": t.special(t.number),
   "Coefficient!": t.unit,
 
   // Look at us being rascals
-  "Type!": t.typeName,
+  "Type! TypeParameters!": t.typeName,
+  // "StructDefinition/Definition! PrimitiveDefinition/Definition! AbstractDefinition/Definition!":
+  //   t.definition(t.typeName),
+  "StructDefinition/Identifier StructDefinition/AssignmentExpression/Identifier StructDefinition/TypedExpression/Identifier StructDefinition/AssignmentExpression/TypedExpression/Identifier":
+    t.definition(t.propertyName),
+
+  ":: <:": t.typeOperator,
 
   Identifier: t.variableName,
+
   "MacroIdentifier! MacroFieldExpression!": t.macroName,
+  "MacroDefinition/Definition!": t.definition(t.macroName),
+
   "FieldName!": t.propertyName,
   FieldExpression: t.propertyName,
   "FieldExpression .": t.derefOperator,
