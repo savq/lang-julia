@@ -83,7 +83,7 @@ let juliaStyleTags = styleTags({
 
   BooleanLiteral: t.bool,
   Number: t.number,
-  "Coefficient!": t.unit,
+  "Coefficient/PrefixedString!": t.unit,
 
   // Look at us being rascals
   "Type! TypeParameters!": t.typeName,
