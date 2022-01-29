@@ -103,12 +103,6 @@ let juliaStyleTags = styleTags({
   FieldExpression: t.propertyName,
   "FieldExpression .": t.derefOperator,
   "Symbol!": t.atom,
-
-  // "get set async static": t.modifier,
-  // "for while do if else switch try catch finally return throw break continue default case": t.controlKeyword,
-  // "in of await yield void typeof delete instanceof": t.operatorKeyword,
-  // "import export from": t.moduleKeyword,
-  // "with debugger as new": t.keyword,
 });
 
 let language = LRLanguage.define({
