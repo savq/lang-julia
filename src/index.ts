@@ -5,9 +5,9 @@ import {
   LanguageSupport,
   indentNodeProp,
 } from "@codemirror/language";
+import { tags as t, styleTags } from "@lezer/highlight";
 import type { Extension } from "@codemirror/state";
 import * as autocomplete from "@codemirror/autocomplete";
-import { styleTags, tags as t } from "@codemirror/highlight";
 import * as indent from "./indent";
 
 type SyntaxConfig = {
@@ -59,6 +59,10 @@ let juliaStyleTags = styleTags({
   StringWithoutInterpolation: t.string,
   TripleStringWithoutInterpolation: t.string,
   CommandStringWithoutInterpolation: t.string,
+
+  "String/$ TripleString/$ CommandString/$": t.special(t.brace),
+  "String/( TripleString/( CommandString/(": t.special(t.brace),
+  "String/) TripleString/) CommandString/)": t.special(t.brace),
 
   Comment: t.lineComment,
   BlockComment: t.comment,
