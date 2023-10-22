@@ -1,3 +1,10 @@
 .PHONY: build
-build:
-	@$(PWD)/node_modules/.bin/cm-buildhelper src/index.ts
+
+SRCS = src/index.ts src/indent.ts
+
+build: $(SRCS)
+	npm run prepare
+
+release:
+	npm publish
+	git tag v$(cat package.json | jq -r .version)
