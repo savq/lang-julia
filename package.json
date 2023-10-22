@@ -1,6 +1,6 @@
 {
   "name": "@plutojl/lang-julia",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Julia language support for the CodeMirror code editor",
   "scripts": {
     "prepare": "cm-buildhelper src/index.ts"
@@ -25,16 +25,19 @@
   "sideEffects": false,
   "license": "MIT",
   "dependencies": {
-    "@codemirror/autocomplete": "^6.3.0",
-    "@codemirror/language": "^6.3.0",
-    "@codemirror/state": "^6.1.2",
-    "@codemirror/view": "^6.4.1",
-    "@lezer/common": "^1.0.1",
-    "@lezer/highlight": "^1.1.2",
-    "@plutojl/lezer-julia": "^0.10.0"
+    "@codemirror/autocomplete": "^6.10.2",
+    "@codemirror/language": "^6.9.1",
+    "@codemirror/state": "^6.3.1",
+    "@codemirror/view": "^6.21.3",
+    "@lezer/common": "^1.1.0",
+    "@lezer/highlight": "^1.1.6",
+    "@plutojl/lezer-julia": "^0.11.0"
   },
   "devDependencies": {
-    "@codemirror/buildhelper": "^0.1.0"
+    "@codemirror/buildhelper": "^1.0.0",
+    "rollup": "^2.70.1",
+    "rollup-plugin-dts": "^4.2.0",
+    "typescript": "^4.9.5"
   },
   "repository": {
     "type": "git",
