@@ -30,7 +30,6 @@
     "@codemirror/state": "^6.3.1",
     "@codemirror/view": "^6.21.3",
     "@lezer/common": "^1.1.0",
-    "@lezer/highlight": "^1.1.6",
     "@plutojl/lezer-julia": "^0.12.0"
   },
   "devDependencies": {
