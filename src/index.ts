@@ -1,27 +1,18 @@
 import { NodeType, NodeProp } from "@lezer/common";
 import { parser } from "@plutojl/lezer-julia";
-import {
-    LRLanguage,
-    LanguageSupport,
-    indentNodeProp,
-} from "@codemirror/language";
+import { continuedIndent, indentNodeProp, LanguageSupport, LRLanguage } from "@codemirror/language";
 import type { Extension } from "@codemirror/state";
 import * as autocomplete from "@codemirror/autocomplete";
-import * as indent from "./indent";
 
 type SyntaxConfig = {
-    indents: { [nodeTypeName: string]: indent.GetIndent };
     keywords: NodeType[];
 };
 
 function getSyntaxConfig(): SyntaxConfig {
     let syntaxConfig: SyntaxConfig = {
-        indents: {
-            VariableDeclaration: indent.continuedIndent(),
-            AssignmentExpression: indent.continuedIndent(),
-        },
         keywords: [],
     };
+
     for (let node of parser.nodeSet.types) {
         // Collect keywords
         let groups = node.prop(NodeProp.group);
@@ -29,16 +20,6 @@ function getSyntaxConfig(): SyntaxConfig {
         if (group === "keyword") {
             syntaxConfig.keywords.push(node);
         }
-
-        // Configure indents
-        let nodeIndent;
-        let closedBy = node.prop(NodeProp.closedBy);
-        if (closedBy) {
-            nodeIndent = indent.delimitedIndent({ closing: closedBy });
-        } else {
-            nodeIndent = indent.noIndent;
-        }
-        syntaxConfig.indents[node.name] = nodeIndent;
     }
 
     return syntaxConfig;
@@ -55,11 +36,17 @@ let language = LRLanguage.define({
     parser: parser.configure({
         props: [
             indentNodeProp.add({
-                ...syntaxConfig.indents,
-                ModuleDefinition: indent.noIndent,
-                BareModuleDefinition: indent.noIndent,
-                VariableDeclaration: indent.continuedIndent(),
-                AssignmentExpression: indent.continuedIndent(),
+                IfStatement: continuedIndent({ except: /^\s*(end\b|else\b|elseif\b)/ }),
+                TryStatement: continuedIndent({ except: /^\s*(end\b|else\b|finally\b)/ }),
+                "Definition CompoundStatement": continuedIndent({ except: /^\s*(end\b)/ }), // node groups
+
+                ExportStatement: continuedIndent(),
+                ImportStatement: continuedIndent(),
+                ReturnStatement: continuedIndent(),
+
+                Assignment: continuedIndent(),
+                BinaryExpression: continuedIndent(),
+                TernaryExpression: continuedIndent(),
             }),
         ],
     }),
