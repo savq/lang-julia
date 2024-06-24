@@ -1,36 +1,7 @@
-import { NodeType, NodeProp } from "@lezer/common";
+import { NodeProp } from "@lezer/common";
 import { parser } from "@plutojl/lezer-julia";
 import { continuedIndent, indentNodeProp, LanguageSupport, LRLanguage } from "@codemirror/language";
-import type { Extension } from "@codemirror/state";
 import * as autocomplete from "@codemirror/autocomplete";
-
-type SyntaxConfig = {
-    keywords: NodeType[];
-};
-
-function getSyntaxConfig(): SyntaxConfig {
-    let syntaxConfig: SyntaxConfig = {
-        keywords: [],
-    };
-
-    for (let node of parser.nodeSet.types) {
-        // Collect keywords
-        let groups = node.prop(NodeProp.group);
-        let group = groups != null ? groups[0] : null;
-        if (group === "keyword") {
-            syntaxConfig.keywords.push(node);
-        }
-    }
-
-    return syntaxConfig;
-}
-
-let syntaxConfig = getSyntaxConfig();
-
-console.log(
-    `syntaxConfig.keywords.map((t) => t.name):`,
-    syntaxConfig.keywords.map((t) => t.name)
-);
 
 let language = LRLanguage.define({
     parser: parser.configure({
@@ -57,13 +28,20 @@ let language = LRLanguage.define({
     },
 });
 
+function collectKeywords() {
+    let keywords = [];
+    for (let node of parser.nodeSet.types) {
+        let groups = node.prop(NodeProp.group);
+        let group = groups != null ? groups[0] : null;
+        if (group === "keyword") {
+            keywords.push({ label: node.name, type: "keyword" });
+        }
+    }
+    return keywords;
+}
+
 export const keywordCompletion = language.data.of({
-    autocomplete: autocomplete.completeFromList(
-        syntaxConfig.keywords.map((keyword) => ({
-            label: keyword.name,
-            type: "keyword",
-        }))
-    ),
+    autocomplete: autocomplete.completeFromList(collectKeywords()),
 });
 
 export type JuliaLanguageConfig = {
@@ -71,13 +49,13 @@ export type JuliaLanguageConfig = {
     enableKeywordCompletion?: boolean;
 };
 
-let defaultConfig: JuliaLanguageConfig = {
+const defaultConfig: JuliaLanguageConfig = {
     enableKeywordCompletion: false,
 };
 
 export function julia(config: JuliaLanguageConfig = defaultConfig) {
     config = { ...defaultConfig, ...config };
-    let extensions: Extension[] = [];
+    let extensions = [];
     if (config.enableKeywordCompletion) {
         extensions.push(keywordCompletion);
     }
