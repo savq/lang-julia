@@ -3,7 +3,7 @@ import { parser } from "@plutojl/lezer-julia";
 import { continuedIndent, indentNodeProp, LanguageSupport, LRLanguage } from "@codemirror/language";
 import * as autocomplete from "@codemirror/autocomplete";
 
-let language = LRLanguage.define({
+export const juliaLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       indentNodeProp.add({
@@ -40,7 +40,7 @@ function collectKeywords() {
   return keywords;
 }
 
-export const keywordCompletion = language.data.of({
+export const keywordCompletion = juliaLanguage.data.of({
   autocomplete: autocomplete.completeFromList(collectKeywords()),
 });
 
@@ -59,5 +59,5 @@ export function julia(config: JuliaLanguageConfig = defaultConfig) {
   if (config.enableKeywordCompletion) {
     extensions.push(keywordCompletion);
   }
-  return new LanguageSupport(language, extensions);
+  return new LanguageSupport(juliaLanguage, extensions);
 }
