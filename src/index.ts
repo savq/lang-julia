@@ -4,60 +4,60 @@ import { continuedIndent, indentNodeProp, LanguageSupport, LRLanguage } from "@c
 import * as autocomplete from "@codemirror/autocomplete";
 
 let language = LRLanguage.define({
-    parser: parser.configure({
-        props: [
-            indentNodeProp.add({
-                IfStatement: continuedIndent({ except: /^\s*(end\b|else\b|elseif\b)/ }),
-                TryStatement: continuedIndent({ except: /^\s*(end\b|else\b|finally\b)/ }),
-                "Definition CompoundStatement": continuedIndent({ except: /^\s*(end\b)/ }), // node groups
+  parser: parser.configure({
+    props: [
+      indentNodeProp.add({
+        IfStatement: continuedIndent({ except: /^\s*(end\b|else\b|elseif\b)/ }),
+        TryStatement: continuedIndent({ except: /^\s*(end\b|else\b|finally\b)/ }),
+        "Definition CompoundStatement": continuedIndent({ except: /^\s*(end\b)/ }), // node groups
 
-                ExportStatement: continuedIndent(),
-                ImportStatement: continuedIndent(),
-                ReturnStatement: continuedIndent(),
+        ExportStatement: continuedIndent(),
+        ImportStatement: continuedIndent(),
+        ReturnStatement: continuedIndent(),
 
-                Assignment: continuedIndent(),
-                BinaryExpression: continuedIndent(),
-                TernaryExpression: continuedIndent(),
-            }),
-        ],
-    }),
-    languageData: {
-        commentTokens: { line: "#" },
-        indentOnInput: /^\s*(\]|\}|\)|end|else|elseif|catch|finally)$/,
-        closeBrackets: { brackets: ["(", "[", "{", "'", '"', "`"] },
-    },
+        Assignment: continuedIndent(),
+        BinaryExpression: continuedIndent(),
+        TernaryExpression: continuedIndent(),
+      }),
+    ],
+  }),
+  languageData: {
+    commentTokens: { line: "#" },
+    indentOnInput: /^\s*(\]|\}|\)|end|else|elseif|catch|finally)$/,
+    closeBrackets: { brackets: ["(", "[", "{", "'", '"', "`"] },
+  },
 });
 
 function collectKeywords() {
-    let keywords = [];
-    for (let node of parser.nodeSet.types) {
-        let groups = node.prop(NodeProp.group);
-        let group = groups != null ? groups[0] : null;
-        if (group === "keyword") {
-            keywords.push({ label: node.name, type: "keyword" });
-        }
+  let keywords = [];
+  for (let node of parser.nodeSet.types) {
+    let groups = node.prop(NodeProp.group);
+    let group = groups != null ? groups[0] : null;
+    if (group === "keyword") {
+      keywords.push({ label: node.name, type: "keyword" });
     }
-    return keywords;
+  }
+  return keywords;
 }
 
 export const keywordCompletion = language.data.of({
-    autocomplete: autocomplete.completeFromList(collectKeywords()),
+  autocomplete: autocomplete.completeFromList(collectKeywords()),
 });
 
 export type JuliaLanguageConfig = {
-    /** Enable keyword completion */
-    enableKeywordCompletion?: boolean;
+  /** Enable keyword completion */
+  enableKeywordCompletion?: boolean;
 };
 
 const defaultConfig: JuliaLanguageConfig = {
-    enableKeywordCompletion: false,
+  enableKeywordCompletion: false,
 };
 
 export function julia(config: JuliaLanguageConfig = defaultConfig) {
-    config = { ...defaultConfig, ...config };
-    let extensions = [];
-    if (config.enableKeywordCompletion) {
-        extensions.push(keywordCompletion);
-    }
-    return new LanguageSupport(language, extensions);
+  config = { ...defaultConfig, ...config };
+  let extensions = [];
+  if (config.enableKeywordCompletion) {
+    extensions.push(keywordCompletion);
+  }
+  return new LanguageSupport(language, extensions);
 }
