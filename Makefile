@@ -1,8 +1,8 @@
 .PHONY: build
 
-SRCS = src/index.ts src/indent.ts
+SRC = src/*.ts
 
-build: $(SRCS)
+build: $(SRC)
 	npm run prepare
 
 release:
